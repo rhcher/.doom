@@ -28,6 +28,7 @@
 (if (display-graphic-p) (load-theme 'spacemacs-dark t)
   (load-theme 'doom-one t)
   )
+(custom-set-faces! '(default :background nil))
 ;; (setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -62,35 +63,13 @@
 (require 'mouse)
 (xterm-mouse-mode t)
 
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+
 (setq auto-save-default nil)
 (setq blink-paren-function nil)
-;; Don't care about bidirectional text. These settings make processing long lines faster.
-;; (setq bidi-inhibit-bpa t)
-;; (setq-default bidi-paragraph-direction 'left-to-right)
-
-;; C++ level 3 decoration can be very slow in certain occasions.  As I use lsp with semantic
-;; highlighting, emacs's decoration doesn't matter too much
-;; (setq font-lock-maximum-decoration '((c-mode . 2) (c++-mode . 2) (t . t)))
-
-;; Vertical Scroll
-;; (setq scroll-step 0)
 (setq scroll-margin 4)
-;; (setq scroll-conservatively 101)
-;; (setq scroll-up-aggressively 0.01)
-;; (setq scroll-down-aggressively 0.01)
-;; (setq auto-window-vscroll nil)
-;; (setq fast-but-imprecise-scrolling nil)
-;; (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-;; (setq mouse-wheel-progressive-speed t)
-;; Horizontal Scroll
-;; (setq hscroll-step 0)
-;; (setq hscroll-margin 0)
-;; Disable splash sceen
-;; (setq initial-major-mode 'text-mode)
-;; (setq initial-scratch-message "Present Day, Present Time...\n")
-
-;; (setq read-process-output-max (* 3 (* 1024 1024)))
 (setq-default truncate-lines nil)
+
 (after! gcmh
   (setq gcmh-high-cons-threshold 33554432)
   )
@@ -114,22 +93,11 @@
   )
 
 (after! company
-  (setq company-minimum-prefix-length 3
+  (setq company-minimum-prefix-length 2
         company-show-numbers t
         company-idle-delay 0
         company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)
                 ))
-
-(after! d-mode
-  (require 'lsp)
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-stdio-connection "dls")
-    :major-modes '(d-mode)
-    :priority -1
-    :server-id 'ddls))
-  (add-hook 'd-mode-hook #'lsp)
-    )
 
 (set-lookup-handlers! 'emacs-lisp-mode :documentation #'helpful-at-point)
 
@@ -258,11 +226,6 @@
         )
   )
 
-(use-package! smart-forward)
-
-(use-package! symbol-overlay
-  :commands (symbol-overlay-put))
-
 (use-package! lsp-rust
   :defer t
   :init (add-hook 'rust-mode-hook #'lsp-rust-enable)
@@ -303,21 +266,12 @@
 
 (add-hook! python-mode #'lsp)
 
-(use-package! rg)
-
 (use-package! smartparens
   :config
   (setq sp-autoinsert-pair t
         sp-autodelete-pair t
         sp-escape-quotes-after-insert t)
   (setq-default sp-autoskip-closing-pair t)
-    )
-
-(use-package! tldr
-  :commands (tldr)
-  :config
-  (setq tldr-directory-path (concat doom-etc-dir "tldr/"))
-  (set-popup-rule! "^\\*tldr\\*" :side 'right :select t :quit t)
     )
 
 (use-package! rmsbolt

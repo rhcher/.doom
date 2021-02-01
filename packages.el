@@ -51,32 +51,6 @@
 (disable-packages! company-irony company-irony-c-headers flycheck-irony irony irony-eldoc ivy-rtags rtags)
 (package! solaire-mode :disable t)
 
-(package! avy)
-(package! lispyville)
-(package! lsp-mode)
-(package! lsp-treemacs)
-(package! lsp-ui)
-(package! spinner)                      ; required by lsp-mode
-
-(package! eshell-autojump)
-(package! evil-collection)
-(package! evil-nerd-commenter)
-(package! frog-jump-buffer)
-(package! git-link)
-(package! link-hint)
-(package! htmlize)
-(package! rg)
-(package! smart-forward)
-(package! symbol-overlay)
-(package! tldr)
-(package! try)
-
-(package! d-mode)
-
-(package! racer :disable t)
-(package! rust-mode)
-(package! lsp-rust :ignore t)
-
 (package! function-args)
 (package! rmsbolt)
 (package! vterm)
@@ -84,6 +58,3 @@
 (package! cmake-mode)
 (package! elpy)
 (package! evil-terminal-cursor-changer)
-(unpin! dash dash-functional)
-(disable-packages! company-prescient)
-(disable-packages! prescient)
