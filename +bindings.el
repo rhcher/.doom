@@ -213,6 +213,7 @@
  (:after yasnippet
   (:map yas-minor-mode-map
    "C-l"              #'yas-skip-and-clear-or-delete-char
+   [delete]             ;; #'delete-backward-char
    )
   )
 

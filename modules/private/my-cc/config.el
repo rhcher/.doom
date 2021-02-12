@@ -102,7 +102,7 @@
        []))
      :index (:initialBlacklist ,+ccls-initial-blacklist :parametersInDeclarations :json-false :trackDependency 2 :initialNoLinkage :json-false)
      :cache (:directory "/tmp/ccls-cache")  ))
-
+  (set-lsp-priority! 'ccls 2)
   )
 
 (use-package! modern-cpp-font-lock

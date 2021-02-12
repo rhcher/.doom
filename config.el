@@ -63,7 +63,8 @@
 (require 'mouse)
 (xterm-mouse-mode t)
 
-(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+;; (global-set-key [delete] 'delete-char)
 
 (setq auto-save-default nil)
 (setq blink-paren-function nil)
@@ -93,9 +94,10 @@
   )
 
 (after! company
-  (setq company-minimum-prefix-length 2
+  (setq company-minimum-prefix-length 1
         company-show-numbers t
         company-idle-delay 0
+        company-backends '(company-capf company-keywords)
         company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)
                 ))
 
@@ -118,17 +120,25 @@
 (use-package! lsp-mode
   :commands lsp
   :config
-  (setq lsp-auto-guess-root t lsp-eldoc-prefer-signature-help t)
+  (setq load-no-native t)
+  (setq lsp-auto-guess-root t)
+  (setq lsp-signature-render-documentation nil)
+  (setq lsp-eldoc-enable-hover t)
+  (setq lsp-eldoc-render-all nil)
   (setq lsp-enable-links nil)
+  (setq lsp-hover-enabled t)
   (setq lsp-prefer-flymake nil)
   (setq lsp-enable-file-watchers nil)
   (setq lsp-keep-workspace-alive nil)
-  ;; (setq lsp-enable-semantic-highlighting t)
   (setq lsp-semantic-tokens-enable t)
   (setq lsp-enable-on-type-formatting nil)
   (setq lsp-imenu-detailed-outline nil)
   (setq lsp-imenu-sort-methods '(position kind name))
   (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-idle-delay 0.500)
+  (setq lsp-log-io nil)
+  (setq lsp-completion-provider :capf)
+  (setq lsp-diagnostics-provider :none)
 
   (add-hook 'evil-insert-state-entry-hook (lambda () (setq-local lsp-hover-enabled nil)))
   (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t)))
@@ -182,15 +192,6 @@
            (if (> n 0) (message "write %d/%d" i n))) "next write" :bind nil)
     )
     )
-
-;; (after! realgud
-;;   (setq realgud-safe-mode nil)
-;;   (evil-collection-define-key 'normal 'realgud:shortkey-mode-map
-;;     "d" #'realgud:cmd-newer-frame
-;;     "D" #'realgud:cmd-delete
-;;     "u" #'realgud:cmd-older-frame
-;;     )
-;;     )
 
 (defun +advice/xref-set-jump (&rest args)
   (require 'lsp-ui)
@@ -311,6 +312,15 @@
 (after! python-mode
   :config
   (yas-minor-mode -1)
+  )
+
+(use-package! lsp-treemacs :defer t)
+
+(use-package! flycheck-clang-tidy
+  :defer t
+  :hook (flycheck-mode . flycheck-clang-tidy-setup)
+  :config
+  (setq flycheck-clang-tidy-extra-options "--checks=-*,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-pro-type-vararg,modernize-*,-modernize-use-trailing-return-type")
   )
 
 ;; TODO workaround emacsclient -nw a.cc
