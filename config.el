@@ -63,6 +63,8 @@
 (require 'mouse)
 (xterm-mouse-mode t)
 
+(remove-hook 'after-init-hook #'global-flycheck-mode)
+
 ;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
 
@@ -113,14 +115,14 @@
 
 (after! flycheck
     ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+   :init (global-flycheck-mode nil)
+   :config
    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
-     (global-flycheck-mode -1)
        )
 
 (use-package! lsp-mode
   :commands lsp
   :config
-  (setq load-no-native t)
   (setq lsp-auto-guess-root t)
   (setq lsp-signature-render-documentation nil)
   (setq lsp-eldoc-enable-hover t)
@@ -139,6 +141,7 @@
   (setq lsp-log-io nil)
   (setq lsp-completion-provider :capf)
   (setq lsp-diagnostics-provider :none)
+  (setq lsp-signature-auto-activate nil)
 
   (add-hook 'evil-insert-state-entry-hook (lambda () (setq-local lsp-hover-enabled nil)))
   (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t)))
@@ -268,6 +271,7 @@
 (add-hook! python-mode #'lsp)
 
 (use-package! smartparens
+  :defer t
   :config
   (setq sp-autoinsert-pair t
         sp-autodelete-pair t
@@ -285,14 +289,14 @@
 
 (setq yas-triggers-in-field t)
 
-(use-package! elpy
-  :defer t
-  :after (python-mode)
-  :init
-  (elpy-enable)
-  :config
-  (setq python-indent-offset 4)
-  )
+;; (use-package! elpy
+;;   :defer t
+;;   :after (python-mode)
+;;   :init
+;;   (elpy-enable)
+;;   :config
+;;   (setq python-indent-offset 4)
+;;   )
 
 (use-package evil-terminal-cursor-changer
   :defer t
@@ -322,6 +326,8 @@
   :config
   (setq flycheck-clang-tidy-extra-options "--checks=-*,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-pro-type-vararg,modernize-*,-modernize-use-trailing-return-type")
   )
+
+(use-package! spacemacs-theme :defer t)
 
 ;; TODO workaround emacsclient -nw a.cc
 (advice-add #'+doom-dashboard|make-frame :override #'ignore)
