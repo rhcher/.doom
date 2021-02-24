@@ -63,7 +63,7 @@
 (require 'mouse)
 (xterm-mouse-mode t)
 
-(remove-hook 'after-init-hook #'global-flycheck-mode)
+(remove-hook 'doom-first-buffer-hook #'global-flycheck-mode)
 
 ;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
@@ -115,9 +115,10 @@
 
 (after! flycheck
     ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
-   :init (global-flycheck-mode nil)
+   ;; :init (global-flycheck-mode nil)
    :config
    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+   (setq flycheck-global-modes nil)
        )
 
 (use-package! lsp-mode
