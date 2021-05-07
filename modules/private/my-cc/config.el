@@ -102,13 +102,20 @@
        []))
      :index (:initialBlacklist ,+ccls-initial-blacklist :parametersInDeclarations :json-false :trackDependency 2 :initialNoLinkage :json-false)
      :cache (:directory "/tmp/ccls-cache")  ))
-  (set-lsp-priority! 'ccls 2)
+  ;; (set-lsp-priority! 'ccls 2)
+  ;; (setq company-backends '(company-capf))
+  (set-company-backend! '(c-mode c++-mode) '(company-capf))
   )
 
 (use-package! modern-cpp-font-lock
   :hook (c++-mode . modern-c++-font-lock-mode))
 
+(use-package! llvm-mode
+  :load-path "~/llvm-project/llvm/utils/emacs"
+  )
+
 (use-package! tablegen-mode
+  :load-path "~/llvm-project/llvm/utils/emacs"
   :defer t
   :mode "\\.td\\'"
   :config

@@ -5,3 +5,5 @@
 (package! clang-format)
 (package! cmake-mode :recipe (:host github :repo "emacsmirror/cmake-mode" :files (:defaults "*")))
 (package! modern-cpp-font-lock)
+(package! llvm-mode :ignore t)
+(package! tablegen-mode :ignore t)

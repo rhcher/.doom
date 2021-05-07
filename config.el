@@ -25,11 +25,11 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(if (display-graphic-p) (load-theme 'spacemacs-dark t)
-  (load-theme 'doom-one t)
-  )
-(custom-set-faces! '(default :background nil))
-;; (setq doom-theme 'doom-one)
+;; (if (display-graphic-p) (load-theme 'spacemacs-dark t)
+;;   (load-theme 'doom-one t)
+;;   )
+;; (custom-set-faces! '(default :background nil))
+(setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -59,11 +59,17 @@
 
 (load! "+bindings")
 (load! "+ui")
-
+'
 (require 'mouse)
 (xterm-mouse-mode t)
 
+(setq doom-unicode-extra-fonts nil)
+
 (remove-hook 'doom-first-buffer-hook #'global-flycheck-mode)
+
+;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
+(add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 
 ;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
@@ -71,11 +77,11 @@
 (setq auto-save-default nil)
 (setq blink-paren-function nil)
 (setq scroll-margin 4)
-(setq-default truncate-lines nil)
+(setq-default truncate-lines t)
 
-(after! gcmh
-  (setq gcmh-high-cons-threshold 33554432)
-  )
+;; (after! gcmh
+;;   (setq gcmh-high-cons-threshold 33554432)
+;;   )
 
 (after! evil-escape
   :config
@@ -96,12 +102,15 @@
   )
 
 (after! company
-  (setq company-minimum-prefix-length 1
+  (setq company-minimum-prefix-length 2
         company-show-numbers t
-        company-idle-delay 0
-        company-backends '(company-capf company-keywords)
+        company-idle-delay 0.35
+        company-backends '(company-capf)
         company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)
-                ))
+                )
+  (setq-default history-length 10)
+  (setq-default prescient-history-length 10)
+  )
 
 (set-lookup-handlers! 'emacs-lisp-mode :documentation #'helpful-at-point)
 
@@ -128,7 +137,7 @@
   (setq lsp-signature-render-documentation nil)
   (setq lsp-eldoc-enable-hover t)
   (setq lsp-eldoc-render-all nil)
-  (setq lsp-enable-links nil)
+  (setq lsp-enable-links t)
   (setq lsp-hover-enabled t)
   (setq lsp-prefer-flymake nil)
   (setq lsp-enable-file-watchers nil)
@@ -138,11 +147,10 @@
   (setq lsp-imenu-detailed-outline nil)
   (setq lsp-imenu-sort-methods '(position kind name))
   (setq lsp-headerline-breadcrumb-enable nil)
-  (setq lsp-idle-delay 0.500)
+  (setq lsp-idle-delay 0.1)
   (setq lsp-log-io nil)
-  (setq lsp-completion-provider :capf)
   (setq lsp-diagnostics-provider :none)
-  (setq lsp-signature-auto-activate nil)
+  (setq lsp-signature-auto-activate t)
 
   (add-hook 'evil-insert-state-entry-hook (lambda () (setq-local lsp-hover-enabled nil)))
   (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t)))
@@ -223,7 +231,7 @@
     (push '(ivy-xref-show-xrefs . nil) ivy-sort-functions-alist))
 
 (use-package! rust-mode
-  :mode "\\.rs$"
+  :mode "\\*.rs$"
   :config
   (map! :map rust-mode-map
         :leader
@@ -269,8 +277,6 @@
      ("_" counsel-projectile-switch-project-action-org-capture
       "org-capture into project"))))
 
-(add-hook! python-mode #'lsp)
-
 (use-package! smartparens
   :defer t
   :config
@@ -314,10 +320,10 @@
   (setq evil-emacs-state-cursor 'box)
   )
 
-(after! python-mode
-  :config
-  (yas-minor-mode -1)
-  )
+;; (after! python-mode
+;;   :config
+;;   (yas-minor-mode -1)
+;;   )
 
 (use-package! lsp-treemacs :defer t)
 
@@ -329,6 +335,17 @@
   )
 
 (use-package! spacemacs-theme :defer t)
+
+(set-popup-rules! '(
+                    ("^\\*helpful" :size 0.4)
+                    ("^\\*info.*" :size 80 :size right)
+                    ("^\\*Man.*" :size 80 :size right)
+                    ))
+
+(after! yasnippet
+  :config
+  (setq yas-inhibit-overlay-modification-protection t)
+  )
 
 ;; TODO workaround emacsclient -nw a.cc
 (advice-add #'+doom-dashboard|make-frame :override #'ignore)
