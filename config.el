@@ -63,7 +63,9 @@
 (require 'mouse)
 (xterm-mouse-mode t)
 
-(setq doom-unicode-extra-fonts nil)
+;; (custom-set-faces! '(default :background nil))
+
+;; (setq doom-unicode-extra-fonts nil)
 
 (remove-hook 'doom-first-buffer-hook #'global-flycheck-mode)
 
@@ -73,11 +75,14 @@
 
 ;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
+;; (setq display-line-numbers-type nil)
+;; (setq-default line-spacing 0.1)
 
 (setq auto-save-default nil)
 (setq blink-paren-function nil)
 (setq scroll-margin 4)
 (setq-default truncate-lines t)
+(setq display-line-numbers-grow-only t)
 
 ;; (after! gcmh
 ;;   (setq gcmh-high-cons-threshold 33554432)
@@ -247,6 +252,7 @@
 
 (after! projectile
     (setq compilation-read-command nil)  ; no prompt in projectile-compile-project)
+    (setq projectile-project-search-path '("~/" "~/"))
     ;; . -> Build
     (projectile-register-project-type 'cmake '("CMakeLists.txt")
                                       :configure "cmake -H. -Bbuild -DCMAKE_EXPORT_COMPILER_COMMANDS=on"
