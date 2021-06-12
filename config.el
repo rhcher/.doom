@@ -59,11 +59,12 @@
 
 (load! "+bindings")
 (load! "+ui")
-'
 (require 'mouse)
 (xterm-mouse-mode t)
 
-;; (custom-set-faces! '(default :background nil))
+;; (normal-erase-is-backspace-mode 1)
+
+(custom-set-faces! '(default :background nil))
 
 ;; (setq doom-unicode-extra-fonts nil)
 
@@ -73,7 +74,7 @@
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 
-;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
 ;; (setq display-line-numbers-type nil)
 ;; (setq-default line-spacing 0.1)
@@ -83,10 +84,6 @@
 (setq scroll-margin 4)
 (setq-default truncate-lines t)
 (setq display-line-numbers-grow-only t)
-
-;; (after! gcmh
-;;   (setq gcmh-high-cons-threshold 33554432)
-;;   )
 
 (after! evil-escape
   :config
@@ -109,12 +106,19 @@
 (after! company
   (setq company-minimum-prefix-length 2
         company-show-numbers t
-        company-idle-delay 0.35
+        company-idle-delay 0.5
         company-backends '(company-capf)
         company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)
                 )
   (setq-default history-length 10)
   (setq-default prescient-history-length 10)
+  )
+
+(after! company-box
+  :config
+  (setq company-box-scrollbar nil
+        company-box-tooltip-maximum-width 100
+        )
   )
 
 (set-lookup-handlers! 'emacs-lisp-mode :documentation #'helpful-at-point)
@@ -252,7 +256,6 @@
 
 (after! projectile
     (setq compilation-read-command nil)  ; no prompt in projectile-compile-project)
-    (setq projectile-project-search-path '("~/" "~/"))
     ;; . -> Build
     (projectile-register-project-type 'cmake '("CMakeLists.txt")
                                       :configure "cmake -H. -Bbuild -DCMAKE_EXPORT_COMPILER_COMMANDS=on"
@@ -311,20 +314,20 @@
 ;;   (setq python-indent-offset 4)
 ;;   )
 
-(use-package evil-terminal-cursor-changer
-  :defer t
-  :config
-  (unless (display-graphic-p)
-    (require 'evil-terminal-cursor-changer)
-    (evil-terminal-cursor-changer-activate)
-    )
-  (setq evil-motion-state-cursor 'box)
-  (setq evil-visual-state-cursor 'box)
-  (setq evil-normal-state-cursor 'box)
-  (setq evil-insert-state-cursor 'bar)
-  (setq evil-replace-state-cursor 'bar)
-  (setq evil-emacs-state-cursor 'box)
-  )
+;; (use-package evil-terminal-cursor-changer
+;;   :defer t
+;;   :config
+;;   (unless (display-graphic-p)
+;;     (require 'evil-terminal-cursor-changer)
+;;     (evil-terminal-cursor-changer-activate)
+;;     )
+;;   (setq evil-motion-state-cursor 'box)
+;;   (setq evil-visual-state-cursor 'box)
+;;   (setq evil-normal-state-cursor 'box)
+;;   (setq evil-insert-state-cursor 'bar)
+;;   (setq evil-replace-state-cursor 'bar)
+;;   (setq evil-emacs-state-cursor 'box)
+;;   )
 
 ;; (after! python-mode
 ;;   :config
@@ -350,6 +353,7 @@
 
 (after! yasnippet
   :config
+  (setq yas-triggers-in-field nil)
   (setq yas-inhibit-overlay-modification-protection t)
   )
 

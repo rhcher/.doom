@@ -1,6 +1,6 @@
 ;;; private/youdao/config.el -*- lexical-binding: t; -*-
 
-(use-package! youdao-dictionary
+(after! youdao-dictionary
   :defer t
   :config
   (map!

@@ -74,6 +74,7 @@
   (after! projectile
     (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
     (add-to-list 'projectile-project-root-files-bottom-up ".ccls-root")
+    ;; (setq projectile-project-search-path '("~/" "~/"))
     (setq projectile-require-project-root t)
     )
   (after! lsp-mode (require 'ccls))
@@ -111,16 +112,16 @@
   :hook (c++-mode . modern-c++-font-lock-mode))
 
 (use-package! llvm-mode
-  :load-path "~/llvm-project/llvm/utils/emacs"
-  )
+ :load-path "~/llvm-project/llvm/utils/emacs"
+ )
 
 (use-package! tablegen-mode
-  :load-path "~/llvm-project/llvm/utils/emacs"
-  :defer t
-  :mode "\\.td\\'"
-  :config
-  (map!
-   :map tablegen-mode-map
-   (:leader
-     :n "=" #'clang-format-region
-     )))
+ :load-path "~/llvm-project/llvm/utils/emacs"
+ :defer t
+ :mode "\\.td\\'"
+ :config
+ (map!
+  :map tablegen-mode-map
+  (:leader
+    :n "=" #'clang-format-region
+    )))
