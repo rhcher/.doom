@@ -64,7 +64,7 @@
 
 ;; (normal-erase-is-backspace-mode 1)
 
-(custom-set-faces! '(default :background nil))
+;; (custom-set-faces! '(default :background nil))
 
 ;; (setq doom-unicode-extra-fonts nil)
 
@@ -74,70 +74,60 @@
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 
-(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
 ;; (setq display-line-numbers-type nil)
 ;; (setq-default line-spacing 0.1)
 
 (setq auto-save-default nil)
 (setq blink-paren-function nil)
-(setq scroll-margin 4)
+(setq scroll-margin 2)
 (setq-default truncate-lines t)
 (setq display-line-numbers-grow-only t)
 
 (after! evil-escape
   :config
-        (setq-default evil-escape-key-sequence "jj")
-        (setq-default evil-escape-delay 0.35)
-  )
+  (setq-default evil-escape-key-sequence "jj")
+  (setq-default evil-escape-delay 0.35))
 
 (after! vterm
   :config
-  (setq vterm-term-environment-variable "xterm-24bit")
-  )
+  (setq vterm-term-environment-variable "xterm-24bit"))
 
 (use-package! avy
   :commands (avy-goto-char-timer)
   :init
   (setq avy-timeout-seconds 0.2)
-  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?u ?i ?o ?p))
-  )
+  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?u ?i ?o ?p)))
 
 (after! company
   (setq company-minimum-prefix-length 2
         company-show-numbers t
         company-idle-delay 0.5
         company-backends '(company-capf)
-        company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)
-                )
-  (setq-default history-length 10)
-  (setq-default prescient-history-length 10)
-  )
+        company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode))
+  (setq-default history-length 100)
+  (setq-default prescient-history-length 100))
 
 (after! company-box
   :config
   (setq company-box-scrollbar nil
-        company-box-tooltip-maximum-width 100
-        )
-  )
+        company-box-tooltip-maximum-width 100))
 
 (set-lookup-handlers! 'emacs-lisp-mode :documentation #'helpful-at-point)
 
 (use-package! evil-nerd-commenter
-  :commands (evilnc-comment-or-uncomment-lines)
-    )
+  :commands (evilnc-comment-or-uncomment-lines))
 
 (after! evil-snipe
-  (setq evil-snipe-scope 'buffer)
-  )
+  (setq evil-snipe-scope 'buffer))
 
 (after! flycheck
-    ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
-   ;; :init (global-flycheck-mode nil)
-   :config
-   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
-   (setq flycheck-global-modes nil)
-       )
+  ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  ;; :init (global-flycheck-mode nil)
+  :config
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+  (setq flycheck-global-modes nil))
 
 (use-package! lsp-mode
   :commands lsp
@@ -162,8 +152,7 @@
   (setq lsp-signature-auto-activate t)
 
   (add-hook 'evil-insert-state-entry-hook (lambda () (setq-local lsp-hover-enabled nil)))
-  (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t)))
-    )
+  (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t))))
 
 (use-package! lsp-ui
   :commands lsp-ui-mode
@@ -194,8 +183,7 @@
         "h" #'lsp-ui-peek--select-prev-file
         "j" #'lsp-ui-peek--select-next
         "k" #'lsp-ui-peek--select-prev
-        "l" #'lsp-ui-peek--select-next-file
-        )
+        "l" #'lsp-ui-peek--select-next-file)
 
   (defhydra hydra/ref (evil-normal-state-map "x")
     "reference"
@@ -210,9 +198,7 @@
     ("W" (-let [(i . n) (lsp-ui-find-prev-reference '(:role 16))]
            (if (> n 0) (message "write %d/%d" i n))) "prev write" :bind nil)
     ("w" (-let [(i . n) (lsp-ui-find-next-reference '(:role 16))]
-           (if (> n 0) (message "write %d/%d" i n))) "next write" :bind nil)
-    )
-    )
+           (if (> n 0) (message "write %d/%d" i n))) "next write" :bind nil)))
 
 (defun +advice/xref-set-jump (&rest args)
   (require 'lsp-ui)
@@ -222,47 +208,42 @@
 
 
 (defvar +my/xref-blacklist nil
-    "List of paths that should not enable xref-find-* or dumb-jump-go")
+  "List of paths that should not enable xref-find-* or dumb-jump-go")
 
 (after! xref
-    ;; This is required to make `xref-find-references' not give a prompt.
-    ;; `xref-find-references' asks the identifier (which has no text property)
-    ;; and then passes it to `lsp-mode', which requires the text property at
-    ;; point to locate the references.
-    ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=29619
-    (setq xref-prompt-for-identifier '(not xref-find-definitions
-                                           xref-find-definitions-other-window
-                                           xref-find-definitions-other-frame
-                                           xref-find-references))
-    )
+  ;; This is required to make `xref-find-references' not give a prompt.
+  ;; `xref-find-references' asks the identifier (which has no text property)
+  ;; and then passes it to `lsp-mode', which requires the text property at
+  ;; point to locate the references.
+  ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=29619
+  (setq xref-prompt-for-identifier '(not xref-find-definitions
+                                         xref-find-definitions-other-window
+                                         xref-find-definitions-other-frame
+                                         xref-find-references)))
 
 (after! ivy-xref
-    (push '(ivy-xref-show-xrefs . nil) ivy-sort-functions-alist))
+  (push '(ivy-xref-show-xrefs . nil) ivy-sort-functions-alist))
 
 (use-package! rust-mode
   :mode "\\*.rs$"
   :config
   (map! :map rust-mode-map
         :leader
-        :n "=" #'rust-format-buffer
-        )
-  )
+        :n "=" #'rust-format-buffer))
 
 (use-package! lsp-rust
   :defer t
   :init (add-hook 'rust-mode-hook #'lsp-rust-enable)
-  :config
-    )
+  :config)
 
 (after! projectile
-    (setq compilation-read-command nil)  ; no prompt in projectile-compile-project)
-    ;; . -> Build
-    (projectile-register-project-type 'cmake '("CMakeLists.txt")
-                                      :configure "cmake -H. -Bbuild -DCMAKE_EXPORT_COMPILER_COMMANDS=on"
-                                      :compile "cmake --build build"
-                                      :test "ctest")
-    (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
-      )
+  (setq compilation-read-command nil) ; no prompt in projectile-compile-project)
+  ;; . -> Build
+  (projectile-register-project-type 'cmake '("CMakeLists.txt")
+                                    :configure "cmake -H. -Bbuild -DCMAKE_EXPORT_COMPILER_COMMANDS=on"
+                                    :compile "cmake --build build"
+                                    :test "ctest")
+  (add-to-list 'projectile-globally-ignored-directories ".ccls-cache"))
 
 (after! counsel-projectile
   (ivy-add-actions
@@ -292,18 +273,16 @@
   (setq sp-autoinsert-pair t
         sp-autodelete-pair t
         sp-escape-quotes-after-insert t)
-  (setq-default sp-autoskip-closing-pair t)
-    )
+  (setq-default sp-autoskip-closing-pair t))
 
 (use-package! rmsbolt
   :defer t
   :after (cc-mode)
   :config
   (setq rmsbolt-asm-format "att")
-  (set-popup-rules! '(("^\\*rmsbolt-output\\*$" :size 0.5 :side right)))
-  )
+  (set-popup-rules! '(("^\\*rmsbolt-output\\*$" :size 0.5 :side right))))
 
-(setq yas-triggers-in-field t)
+;; (setq yas-triggers-in-field t)
 
 ;; (use-package! elpy
 ;;   :defer t
@@ -340,22 +319,48 @@
   :defer t
   :hook (flycheck-mode . flycheck-clang-tidy-setup)
   :config
-  (setq flycheck-clang-tidy-extra-options "--checks=-*,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-pro-type-vararg,modernize-*,-modernize-use-trailing-return-type")
-  )
-
-(use-package! spacemacs-theme :defer t)
+  (setq flycheck-clang-tidy-extra-options "--checks=-*,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-pro-type-vararg,modernize-*,-modernize-use-trailing-return-type"))
 
 (set-popup-rules! '(
                     ("^\\*helpful" :size 0.4)
                     ("^\\*info.*" :size 80 :size right)
-                    ("^\\*Man.*" :size 80 :size right)
-                    ))
+                    ("^\\*Man.*" :size 80 :size right)))
 
-(after! yasnippet
+(use-package! yasnippet
   :config
-  (setq yas-triggers-in-field nil)
+  (setq yas-triggers-in-field t)
   (setq yas-inhibit-overlay-modification-protection t)
-  )
+  (map! :map yas-keymap "<backspace>" nil))
+
+(after! lispy
+  (setq lispy-outline "^;; \\(?:;[^#]\\|\\*+\\)"
+        lispy-outline-header ";; "
+        lispy-ignore-whitespace t)
+  (map! :map lispy-mode-map
+        :i "C-c (" #'lispy-wrap-round
+        :i "_" #'special-lispy-different
+        "d" nil
+        :i [remap delete-backward-char] #'lispy-delete-backward))
+
+(after! lispyville
+  (map! :map lispyville-mode-map
+        :i "C-w" #'backward-delete-char
+        :n "M-j" nil
+        :n "H" #'sp-backward-sexp
+        :n "L" #'sp-forward-sexp))
+
+(map! :after elisp-mode
+      :map emacs-lisp-mode-map
+      :n "gh" #'helpful-at-point
+      :n "gl" (lambda! (let (lispy-ignore-whitespace) (call-interactively #'lispyville-right)))
+      :n "C-<left>" #'lispy-forward-barf-sexp
+      :n "C-<right>" #'lispy-forward-slurp-sexp
+      :n "C-M-<left>" #'lispy-backward-slurp-sexp
+      :n "C-M-<right>" #'lispy-backward-barf-sexp
+      :i "C-w" #'delete-backward-char
+      :n "<tab>" #'lispyville-prettify
+      :localleader
+      :n "x" (lambda! (save-excursion (forward-sexp) (eval-last-sexp nil))))
 
 ;; TODO workaround emacsclient -nw a.cc
 (advice-add #'+doom-dashboard|make-frame :override #'ignore)
