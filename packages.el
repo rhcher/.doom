@@ -59,6 +59,7 @@
 ;; (package! magit-todos :recipe (:build (:not native-compile)))
 (package! function-args)
 (package! rmsbolt :recipe (:host github :repo "emacsmirror/rmsbolt" :files (:defaults "*")))
+(package! pdf-continuous-scroll-mode :recipe (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
 ;; (package! vterm)
 ;; (package! spacemacs-theme)
 ;; (package! elpy :recipe (:build (:not native-compile)))

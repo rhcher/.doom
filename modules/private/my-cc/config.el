@@ -75,8 +75,7 @@
     (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
     (add-to-list 'projectile-project-root-files-bottom-up ".ccls-root")
     ;; (setq projectile-project-search-path '("~/" "~/"))
-    (setq projectile-require-project-root t)
-    )
+    (setq projectile-require-project-root t))
   (after! lsp-mode (require 'ccls))
   :config
   (evil-set-initial-state 'ccls-tree-mode 'emacs)
@@ -89,23 +88,20 @@
   ;; https://github.com/maskray/ccls/blob/master/src/config.h
   (setq
    ccls-initialization-options
-   `(:clang
-     (:excludeArgs
-      ;; Linux's gcc options. See ccls/wiki
-      ["-falign-jumps=1" "-falign-loops=1" "-fconserve-stack" "-fmerge-constants" "-fno-code-hoisting" "-fno-schedule-insns" "-fno-var-tracking-assignments" "-fsched-pressure"
-       "-mhard-float" "-mindirect-branch-register" "-mindirect-branch=thunk-inline" "-mpreferred-stack-boundary=2" "-mpreferred-stack-boundary=3" "-mpreferred-stack-boundary=4" "-mrecord-mcount" "-mindirect-branch=thunk-extern" "-mno-fp-ret-in-387" "-mskip-rax-setup"
-       "--param=allow-store-data-races=0" "-Wa arch/x86/kernel/macros.s" "-Wa -"]
-      :extraArgs []
-      :pathMappings ,+ccls-path-mappings)
-     :completion
-     (:include
-      (:blacklist
-       []))
-     :index (:initialBlacklist ,+ccls-initial-blacklist :parametersInDeclarations :json-false :trackDependency 2 :initialNoLinkage :json-false)
-     :cache (:directory "/tmp/ccls-cache")  ))
+   `(:clang (:excludeArgs
+             ;; Linux's gcc options. See ccls/wiki
+             ["-falign-jumps=1" "-falign-loops=1" "-fconserve-stack" "-fmerge-constants" "-fno-code-hoisting" "-fno-schedule-insns" "-fno-var-tracking-assignments" "-fsched-pressure"
+              "-mhard-float" "-mindirect-branch-register" "-mindirect-branch=thunk-inline" "-mpreferred-stack-boundary=2" "-mpreferred-stack-boundary=3" "-mpreferred-stack-boundary=4" "-mrecord-mcount" "-mindirect-branch=thunk-extern" "-mno-fp-ret-in-387" "-mskip-rax-setup"
+              "--param=allow-store-data-races=0" "-Wa arch/x86/kernel/macros.s" "-Wa -"]
+             :extraArgs []
+             :pathMappings ,+ccls-path-mappings)
+     :completion (:include (:blacklist []))
+     :index (:initialBlacklist ,+ccls-initial-blacklist :parametersInDeclarations t :trackDependency 2 :initialNoLinkage t)
+     :cache (:directory "/tmp/ccls-cache" :hierarchicalPath t :retainInMemory 2)
+     :client (:diagnosticsRelatedInformation :json-false)
+     :highlights (:lsRanges :json-false)))
   ;; (set-lsp-priority! 'ccls 2)
   ;; (setq company-backends '(company-capf))
-  (set-company-backend! '(c-mode c++-mode) '(company-capf))
   )
 
 (use-package! modern-cpp-font-lock

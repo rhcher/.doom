@@ -149,6 +149,7 @@
      "d" #'+debugger:start
      "o" #'symbol-overlay-put
      "q" #'symbol-overlay-remove-all
+     "r" (λ! (switch-to-racket))
      )
    (:prefix "p"
      "e" #'projectile-run-eshell
@@ -220,7 +221,7 @@
 
  (:after ielm
   (:map ielm-map
-   "C-j" #'sp-newline))
+   "<return>" #'sp-newline))
 
  (:after magit
   (:map magit-revision-mode-map

@@ -1,11 +1,11 @@
 ;;; private/my/+ui.el -*- lexical-binding: t; -*-
 
 (setq
- doom-font (font-spec :family "JetBrainsMono NF" :size 20)
+ doom-font (font-spec :family "JetBrainsMono NF" :size 22)
  doom-variable-pitch-font (font-spec :family "Noto Serif")
  doom-unicode-font (font-spec :family "JetBrainsMono NF")
  )
-(setq doom-big-font (font-spec :family "JetBrainsMono NF" :size 23))
+(setq doom-big-font (font-spec :family "JetBrainsMono NF" :size 25))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

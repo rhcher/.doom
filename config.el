@@ -59,8 +59,8 @@
 
 (load! "+bindings")
 (load! "+ui")
-(require 'mouse)
-(xterm-mouse-mode t)
+;; (require 'mouse)
+;; (xterm-mouse-mode t)
 
 ;; (normal-erase-is-backspace-mode 1)
 
@@ -74,7 +74,7 @@
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 
-;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 ;; (global-set-key [delete] 'delete-char)
 ;; (setq display-line-numbers-type nil)
 ;; (setq-default line-spacing 0.1)
@@ -102,10 +102,9 @@
 
 (after! company
   (setq company-minimum-prefix-length 2
-        company-show-numbers t
+        company-show-numbers nil
         company-idle-delay 0.5
-        company-backends '(company-capf)
-        company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode))
+        company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode eshell-mode))
   (setq-default history-length 100)
   (setq-default prescient-history-length 100))
 
@@ -150,6 +149,9 @@
   (setq lsp-log-io nil)
   (setq lsp-diagnostics-provider :none)
   (setq lsp-signature-auto-activate t)
+  (setq lsp-completion-filter-on-incomplete t)
+  (setq lsp-completion-sort-initial-results nil)
+  (setq lsp-completion-use-last-result t)
 
   (add-hook 'evil-insert-state-entry-hook (lambda () (setq-local lsp-hover-enabled nil)))
   (add-hook 'evil-insert-state-exit-hook (lambda () (setq-local lsp-hover-enabled t))))
@@ -361,6 +363,25 @@
       :n "<tab>" #'lispyville-prettify
       :localleader
       :n "x" (lambda! (save-excursion (forward-sexp) (eval-last-sexp nil))))
+
+(after! pyim
+  (setq pyim-page-tooltip 'posframe)
+  (setq-default pyim-punctuation-half-width-functions '(pyim-probe-punctuation-after-punctuation)))
+
+(use-package! pdf-continuous-scroll-mode
+  :defer t)
+
+(use-package! pdf
+  :hook (pdf-view-mode . pdf-view-midnight-minor-mode)
+  :init
+  (add-hook 'pdf-view-mode #'pdf-continuous-scroll-mode)
+  :config
+  (setq pdf-view-continuous t))
+
+(map! :after pdf-continuous-scroll-mode
+      :map pdf-continuous-scroll-mode-map
+      :n "j" #'pdf-continuous-scroll-forward
+      :n "k" #'pdf-continuous-scroll-backward)
 
 ;; TODO workaround emacsclient -nw a.cc
 (advice-add #'+doom-dashboard|make-frame :override #'ignore)
